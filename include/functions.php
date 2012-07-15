@@ -1,5 +1,5 @@
 <?php
-	define('EXPECTED_CONFIG_VERSION', 25);
+	define('EXPECTED_CONFIG_VERSION', 26);
 	define('SCHEMA_VERSION', 92);
 
 	date_default_timezone_set('UTC');
@@ -688,7 +688,7 @@
 	function get_remote_user($link) {
 
 		if (defined('ALLOW_REMOTE_USER_AUTH') && ALLOW_REMOTE_USER_AUTH) {
-			return db_escape_string($_SERVER["REMOTE_USER"]);
+			return db_escape_string($_SERVER[defined('REMOTE_USER_VARIABLE') ? REMOTE_USER_VARIABLE : "REMOTE_USER"]);
 		}
 
 		return db_escape_string(get_login_by_ssl_certificate($link));
@@ -720,7 +720,7 @@
 					login = '$login'";
 
 				if (defined('AUTO_CREATE_USER') && AUTO_CREATE_USER
-						&& $_SERVER["REMOTE_USER"]) {
+						&& $_SERVER[defined('REMOTE_USER_VARIABLE') ? REMOTE_USER_VARIABLE : "REMOTE_USER"]) {
 					$result = db_query($link, $query);
 
 					// First login ?
